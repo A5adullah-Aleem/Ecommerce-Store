@@ -17,7 +17,7 @@ import { useProducts, Product } from "@/hooks/useProducts"
 import toast from "react-hot-toast"
 
 export default function AdminDashboard() {
-  const { products, loading, deleteProduct } = useProducts()
+  const { products, loading, deleteProduct } = useProducts(true) // Auto-fetch products
   const [searchTerm, setSearchTerm] = useState("")
   const [filterType, setFilterType] = useState("all")
   const [filterCategory, setFilterCategory] = useState("all")

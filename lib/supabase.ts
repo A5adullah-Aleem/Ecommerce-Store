@@ -22,45 +22,57 @@ export interface Database {
         Row: {
           id: string
           name: string
+          slug: string
           description: string
           price: number
           image: string
           category: 'women' | 'men' | 'kids'
           collection: string
-          type: 'stitched' | 'unstitched'
+          type: 'makeup' | 'skincare' | 'fragrances'
           in_stock: boolean
           sizes: string[]
           colors: string[]
+          meta_title: string | null
+          meta_description: string | null
+          meta_keywords: string[]
           created_at: string
           updated_at: string
         }
         Insert: {
           id?: string
           name: string
+          slug?: string
           description: string
           price: number
           image: string
           category?: 'women' | 'men' | 'kids'
           collection: string
-          type: 'stitched' | 'unstitched'
+          type: 'makeup' | 'skincare' | 'fragrances'
           in_stock?: boolean
           sizes?: string[]
           colors?: string[]
+          meta_title?: string | null
+          meta_description?: string | null
+          meta_keywords?: string[]
           created_at?: string
           updated_at?: string
         }
         Update: {
           id?: string
           name?: string
+          slug?: string
           description?: string
           price?: number
           image?: string
           category?: 'women' | 'men' | 'kids'
           collection?: string
-          type?: 'stitched' | 'unstitched'
+          type?: 'makeup' | 'skincare' | 'fragrances'
           in_stock?: boolean
           sizes?: string[]
           colors?: string[]
+          meta_title?: string | null
+          meta_description?: string | null
+          meta_keywords?: string[]
           created_at?: string
           updated_at?: string
         }

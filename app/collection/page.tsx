@@ -4,7 +4,7 @@ import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { ProductCard } from "@/components/product-card"
 import { useProducts } from "@/hooks/useProducts"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { motion } from "framer-motion"
 
 export default function CollectionPage() {
@@ -12,22 +12,16 @@ export default function CollectionPage() {
   const [products, setProducts] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const { getProducts } = useProducts()
+  const hasFetched = useRef(false)
 
   useEffect(() => {
+    // Prevent duplicate fetches
+    if (hasFetched.current) return
+    hasFetched.current = true
+
     const fetchProducts = async () => {
       try {
-        console.log('Collection page: getProducts function:', typeof getProducts)
-        console.log('Collection page: getProducts available:', !!getProducts)
-        
-        if (typeof getProducts !== 'function') {
-          console.error('getProducts is not a function!')
-          setProducts([])
-          setLoading(false)
-          return
-        }
-        
         const result = await getProducts()
-        console.log('Collection page: getProducts result:', result)
         
         if (result.success && result.data) {
           setProducts(result.data)
@@ -43,7 +37,7 @@ export default function CollectionPage() {
     }
 
     fetchProducts()
-  }, [])
+  }, [getProducts])
 
   const filteredProducts = products.filter((p) => p.type === activeTab)
 
@@ -99,6 +93,7 @@ export default function CollectionPage() {
               >
                 <ProductCard
                   id={product.id}
+                  slug={product.slug}
                   name={product.name}
                   price={product.price}
                   image={product.image}

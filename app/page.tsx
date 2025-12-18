@@ -8,23 +8,21 @@ import { testimonials, whyChooseUs } from "@/lib/dummy-data";
 import { useProducts } from "@/hooks/useProducts";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
-import Head from "next/head"; // ✅ Import Head for SEO
+import { useEffect, useState, useRef } from "react";
 
 export default function Home() {
   const { getProducts } = useProducts();
   const [featuredProducts, setFeaturedProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const hasFetched = useRef(false);
 
   useEffect(() => {
+    // Prevent duplicate fetches
+    if (hasFetched.current) return;
+    hasFetched.current = true;
+
     const fetchProducts = async () => {
       try {
-        if (typeof getProducts !== "function") {
-          setFeaturedProducts([]);
-          setLoading(false);
-          return;
-        }
-
         const result = await getProducts({ featured: true });
         if (result.success && result.data) {
           setFeaturedProducts(result.data.slice(0, 6));
@@ -39,29 +37,10 @@ export default function Home() {
     };
 
     fetchProducts();
-  }, []);
+  }, [getProducts]);
 
   return (
     <div className="min-h-screen bg-white">
-      {/* SEO Meta Tags */}
-      <Head>
-        <title>Glamour Cosmetics - Premium Makeup, Skincare & Fragrances</title>
-        <meta
-          name="description"
-          content="Discover your inner beauty with Glamour Cosmetics. Explore our premium collection of makeup, skincare, and fragrances."
-        />
-        <meta name="robots" content="index, follow" />
-        <meta
-          property="og:title"
-          content="Glamour Cosmetics - Premium Makeup, Skincare & Fragrances"
-        />
-        <meta
-          property="og:description"
-          content="Discover your inner beauty with Glamour Cosmetics. Explore our premium collection of makeup, skincare, and fragrances."
-        />
-        <meta property="og:type" content="website" />
-      </Head>
-
       <Header />
 
       {/* Hero Section */}
@@ -122,6 +101,7 @@ export default function Home() {
                 >
                   <ProductCard
                     id={product.id}
+                    slug={product.slug}
                     name={product.name}
                     price={product.price}
                     image={product.image}

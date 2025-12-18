@@ -41,9 +41,22 @@ export const apiClient = {
     }
   },
 
-  getProduct: async (id: string) => {
+  getProduct: async (idOrSlug: string) => {
     try {
-      const response = await api.get(`/products/${id}`)
+      // The API now supports both UUID and slug
+      const response = await api.get(`/products/${idOrSlug}`)
+      return response.data
+    } catch (error: any) {
+      return {
+        success: false,
+        error: error.response?.data?.error || error.message || "Failed to fetch product",
+      }
+    }
+  },
+
+  getProductBySlug: async (slug: string) => {
+    try {
+      const response = await api.get(`/products/${slug}`)
       return response.data
     } catch (error: any) {
       return {
